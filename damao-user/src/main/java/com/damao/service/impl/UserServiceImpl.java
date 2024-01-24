@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
         String username = userLoginDTO.getUsername();
         User user = userMapper.getByUsername(username);
         if (user == null) {
-            throw new AccountNotFoundException("账号不存在");
+            throw new AccountNotFoundException("账号或密码错误");
         }
         if (!Objects.equals(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)), user.getPassword())) {
-            throw new PasswordErrorException("密码错误");
+            throw new PasswordErrorException("账号或密码错误");
         }
         if (user.getStatus() == 0) {
             throw new UserStatusErrorException("用户状态不正常");

@@ -159,11 +159,11 @@
 <!--            <artifactId>spring-boot-starter-mail</artifactId>-->
 <!--        </dependency>-->
         <!--spring web 模块-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <!--websocket-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
@@ -208,7 +208,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>

@@ -1,5 +1,7 @@
 server:
   port: 8085
-spring:
-  application:
-    name: user-service
+damao:
+  jwt:
+    admin-secret-key: damaoz
+    admin-ttl: 7200000
+    admin-token-name: token

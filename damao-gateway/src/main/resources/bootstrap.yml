@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      server-addr: 120.53.88.192:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: video-service
+          uri: lb://video-service
+          predicates:
+            - Path=/video/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+      default-filters:
+        - AddRequestHeader=gateway-env, springcloud-gateway
