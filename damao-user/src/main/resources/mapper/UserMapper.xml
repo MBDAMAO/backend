@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.damao.mapper.UserMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="uid">
+        insert into video_platform.users(username, email, password, sex, birthday, create_time, update_time)
+        VALUES (#{username}, #{email}, #{password}, #{sex}, #{birthday}, #{createTime}, #{updateTime});
+    </insert>
+    <update id="update">
+        update video_platform.users
+        <set>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where uid = #{uid};
+    </update>
+    <select id="getFollowersById" resultType="com.damao.pojo.vo.UserVO">
+        select follower_id,username,sex,status from video_platform.users u inner join video_platform.follower_relation f on f.uid = u.uid
+        <where>
+            f.uid = #{uid}
+        </where>
+        order by f.create_time desc
+    </select>
+    <select id="getFollowedById" resultType="com.damao.pojo.vo.UserVO">
+        select f.uid,username,sex,status from video_platform.users u inner join video_platform.follower_relation f on f.uid = u.uid
+        <where>
+            f.follower_id = #{uid}
+        </where>
+        order by f.create_time desc
+    </select>
+    <select id="getUsers" resultType="com.damao.pojo.vo.UserVO">
+        select uid,status,username,sex from video_platform.users
+        <where>
+            <if test="username != null">
+                username = #{username},
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+</mapper>

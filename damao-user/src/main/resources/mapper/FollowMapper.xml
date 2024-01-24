@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.damao.mapper.FollowMapper">
+    <select id="getFollowersById" resultType="java.lang.Long">
+        select follower_id
+        from video_platform.follower_relation where uid = #{id};
+    </select>
+    <select id="getFollowedById" resultType="java.lang.Long">
+        select uid
+        from video_platform.follower_relation where follower_id = #{id};
+    </select>
+</mapper>

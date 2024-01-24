@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  servlet:
+    multipart:
+      max-file-size: 200MB        # 设置单个文件最大大小为200MB
+      max-request-size: 400MB
+  cloud:
+    nacos:
+      server-addr: 120.53.88.192:8848
+      config:
+        file-extension: yaml
+        shared-configs:
+          - dataId: shared-jdbc.yaml
+          - dataId: shared-redis.yaml
+          - dataId: shared-rabbitmq.yaml
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.damao.mapper.VideoMapper">
+    <update id="update">
+        update video_platform.videos
+        <set>
+            <if test="videoName != null">video_name= #{videoName},</if>
+            <if test="videoCoverUrl != null">video_cover_url= #{videoCoverUrl},</if>
+            <if test="videoUrl != null">video_url= #{videoUrl},</if>
+            <if test="ownerId != null">owner_id= #{ownerId},</if>
+            <if test="likes != null">likes= #{likes},</if>
+            <if test="saves != null">saves= #{saves},</if>
+            <if test="shares != null">shares= #{shares},</if>
+            <if test="auditStatus != null">judge_status= #{auditStatus},</if>
+            <if test="auditResult != null">judge_result= #{auditResult},</if>
+            <if test="updateTime != null">update_time= #{updateTime},</if>
+            <if test="createTime != null">create_time= #{createTime},</if>
+        </set>
+        where vid = #{vid}
+    </update>
+    <insert id="save" useGeneratedKeys="true" keyProperty="vid">
+        insert into video_platform.videos(video_name, video_cover_url, video_url,
+                                          owner_id, likes, saves, shares, judge_status, judge_result, create_time)
+        VALUES (#{videoName}, #{videoCoverUrl}, #{videoUrl}, #{ownerId}, #{likes}, #{saves}, #{shares}, #{auditStatus},
+                #{auditResult}, #{createTime})
+    </insert>
+    <update id="updateLikeRelation">
+        update video_platform.video_likes_relation
+        <set>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="vid != null">vid = #{vid},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getByIds" resultType="com.damao.pojo.entity.Video">
+        SELECT * FROM video_platform.videos
+        WHERE vid IN
+        <foreach collection="vidList" item="vid" open="(" close=")" separator=",">
+        #{vid}
+        </foreach>
+    </select>
+</mapper>
