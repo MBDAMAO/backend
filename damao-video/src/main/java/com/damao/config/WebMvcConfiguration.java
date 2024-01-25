@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -27,9 +28,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(authorizeInterceptor).addPathPatterns("/**");
     }
 
-    /**
-     * 设置静态资源映射
-     */
     protected void extendMessageConverters (List<HttpMessageConverter<?>> converters) {
         log.info("扩展消息转换器o(*￣▽￣*)ブ");
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
