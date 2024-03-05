@@ -13,10 +13,16 @@ spring:
           uri: lb://video-service
           predicates:
             - Path=/video/**
+
         - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/user/**
+
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/comment/**
       default-filters:
         - AddRequestHeader=gateway-env, springcloud-gateway
       globalcors:

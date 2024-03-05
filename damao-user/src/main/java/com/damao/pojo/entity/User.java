@@ -2,7 +2,7 @@ package com.damao.pojo.entity;
 
 
 import lombok.*;
-
+import com.damao.aspect.BaseEntity;
 import java.io.Serializable;
 import java.util.Date;
 

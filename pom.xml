@@ -13,6 +13,7 @@
         <module>damao-mail</module>
         <module>damao-user</module>
         <module>damao-upload</module>
+        <module>damao-comment</module>
     </modules>
 
     <parent>

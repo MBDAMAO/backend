@@ -36,6 +36,7 @@ public class AutoFillAspect {
             return;
         }
         Object entity = args[0];
+        log.info("sss{}",entity);
         LocalDateTime now = LocalDateTime.now();
         Class<BaseEntity> class_ = BaseEntity.class;
         if (operationType == OperationType.INSERT) {

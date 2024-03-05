@@ -1,6 +1,6 @@
 package com.damao.pojo.entity;
 
-
+import com.damao.aspect.BaseEntity;
 import lombok.*;
 
 import java.io.Serializable;

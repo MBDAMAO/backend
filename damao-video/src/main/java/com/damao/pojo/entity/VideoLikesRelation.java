@@ -1,6 +1,6 @@
 package com.damao.pojo.entity;
 
-import com.damao.context.BaseContext;
+import com.damao.aspect.BaseEntity;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoLikesRelation extends BaseContext {
+public class VideoLikesRelation extends BaseEntity {
     private Long id;
     private Long uid;
     private Long vid;

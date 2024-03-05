@@ -6,6 +6,7 @@ import com.damao.pojo.entity.VideoLikesRelation;
 import com.damao.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -32,9 +33,14 @@ public class TaskManager {
     @Scheduled(cron = "0 0 0 * * ?")
     public void cleanViewCountHistory() {
         log.info("定时任务启动，删除当日浏览记录排行记录[]~(￣▽￣)~*");
+        try {
         Object obj = redisTemplate.opsForZSet().rangeWithScores(RedisNameConstant.VIDEO_DAILY_VIEW_RANK,0,0);
-        if (obj != null) {
-            redisTemplate.opsForZSet().remove(RedisNameConstant.VIDEO_DAILY_VIEW_RANK);
+            if (obj != null) {
+                redisTemplate.opsForZSet().remove(RedisNameConstant.VIDEO_DAILY_VIEW_RANK);
+            }
+        }
+        catch (RedisSystemException e) {
+            e.printStackTrace();
         }
     }
 

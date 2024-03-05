@@ -1,7 +1,7 @@
 package com.damao.pojo.entity;
 
 import lombok.*;
-
+import com.damao.aspect.BaseEntity;
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
