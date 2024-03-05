@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 评论接口，包含发布，查看
+ */
 @RestController
 @RequestMapping("/comment")
 @Slf4j
@@ -32,12 +35,21 @@ public class CommentController {
         return Result.success(r);
     }
 
+    // 获取某顶级评论子评论
+    @GetMapping("/subComments/{cid}")
+    public Result<?> getNextComments(@PathVariable Long cid) {
+
+        return Result.success();
+    }
+
+    // 评论某实体
     @PostMapping("/comment")
     public Result<?> publishComment(@RequestBody PublishCommentDTO publishCommentDTO) {
 
         return Result.success();
     }
 
+    // 回复某实体下的评论
     @PostMapping("/reply")
     public Result<?> replyComment(@RequestBody PublishCommentDTO publishCommentDTO) {
 
