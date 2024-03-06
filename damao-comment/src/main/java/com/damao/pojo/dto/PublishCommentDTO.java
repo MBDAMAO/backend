@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class PublishCommentDTO {
-    private String context;
-    private Long vid;
+    private String content;
+    private Long entityId;
     private Long toUid;
+    private Long ipLabel;
 }
