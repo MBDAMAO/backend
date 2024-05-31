@@ -169,6 +169,11 @@ public class UserServiceImpl implements UserService {
         }
         log.info("验证成功");
     }
+
+    @Override
+    public List<User> batchQueryByIds(List<Long> ids) {
+        return userMapper.batchQueryByIds(ids);
+    }
 }
 
 

@@ -6,7 +6,7 @@ import com.damao.pojo.entity.Comment;
 
 
 public interface CommentService {
-    PageDTO<Comment> getCommentsByEntity(Long entityId);
+    PageDTO<?> getCommentsByEntity(Long entityId, Integer cursor);
     PageDTO<Comment> getCommentsByParent(Long parentId);
     void comment(PublishCommentDTO publishCommentDTO);
     void reply(PublishCommentDTO publishCommentDTO);

@@ -10,6 +10,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     @Select("select * from video_platform.users where uid = #{uid}")
@@ -32,4 +34,6 @@ public interface UserMapper {
 
     @Select("SELECT like_vector from video_platform.user_model where uid=#{uid}")
     String getModel(Long uid);
+
+    List<User> batchQueryByIds(List<Long> ids);
 }

@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -187,4 +188,11 @@ public class UserController {
         userService.verifyEmail(verifyEmailDTO);
         return Result.success();
     }
+
+    @GetMapping("/batchSelect")
+    public List<User> batchQueryByIds(@RequestBody List<Long> ids) {
+        List<User> data = userService.batchQueryByIds(ids);
+        return data;
+    }
+
 }

@@ -50,4 +50,11 @@
         </where>
         order by create_time desc
     </select>
+    <select id="batchQueryByIds" resultType="com.damao.pojo.entity.User">
+        select * from video_platform.users
+        where uid in
+        <foreach collection="ids" open="(" close=")" item="id" separator="," >
+            #{id}
+        </foreach>
+    </select>
 </mapper>

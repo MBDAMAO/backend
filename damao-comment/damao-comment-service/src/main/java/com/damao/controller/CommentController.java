@@ -19,7 +19,7 @@ import java.util.List;
 public class CommentController {
 
     @GetMapping("/videoComments/{vid}")
-    public Result<?> getVideoComments(@PathVariable Long vid) {
+    public Result<?> getVideoComments(@PathVariable Long vid, @RequestParam Integer cursor) {
         CommentVO comment = CommentVO.builder()
                 .uid(123L)
                 .content("今天吃了狗屎好开心")

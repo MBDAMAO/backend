@@ -7,6 +7,8 @@ import com.damao.pojo.dto.UserRegistryDTO;
 import com.damao.pojo.dto.VerifyEmailDTO;
 import com.damao.pojo.entity.User;
 
+import java.util.List;
+
 
 public interface UserService {
     User login(UserLoginDTO userLoginDTO);
@@ -32,4 +34,6 @@ public interface UserService {
     void verifyEmail(VerifyEmailDTO verifyEmailDTO);
 
     boolean followStatus(Long id);
+
+    List<User> batchQueryByIds(List<Long> ids);
 }
