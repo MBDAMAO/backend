@@ -11,6 +11,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -38,12 +39,12 @@ public class WebSocket implements BeanFactoryAware , InitializingBean {
     private static final ConcurrentHashMap<Long, Session> sessionPool = new ConcurrentHashMap<>();
 
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    public void setBeanFactory(@NonNull BeanFactory beanFactory) throws BeansException {
         beanfactory = beanFactory;
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         chatService = beanfactory.getBean(ChatServiceImpl.class);
     }
 
