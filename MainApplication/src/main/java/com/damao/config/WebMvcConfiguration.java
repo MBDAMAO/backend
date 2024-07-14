@@ -16,9 +16,6 @@ import java.util.List;
 @Slf4j
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
-    /**
-     * 设置静态资源映射
-     */
     protected void extendMessageConverters (List<HttpMessageConverter<?>> converters) {
         log.info("扩展消息转换器o(*￣▽￣*)ブ");
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
