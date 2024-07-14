@@ -33,8 +33,8 @@ public class CommonController {
             assert originalFilename != null;
             String[] filename = originalFilename.split("\\.");
             String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
-            String objName = UUID.randomUUID().toString() + extension;
-            File input = null;
+            String objName = UUID.randomUUID() + extension;
+            File input;
             input = File.createTempFile(filename[0], filename[1]);
             file.transferTo(input);
             String filePath = cosUtil.upload(input, objName);
