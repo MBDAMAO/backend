@@ -7,4 +7,5 @@ import java.io.Serializable;
 @Data
 public class SendEmailDTO implements Serializable {
     private String email;
+    private Long uid;
 }

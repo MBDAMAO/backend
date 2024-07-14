@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class Result<E> implements Serializable {
-    private Integer code;
+    private Integer status_code;
     private String msg;
     private E data;
 
@@ -16,22 +16,35 @@ public class Result<E> implements Serializable {
      */
     public static <E> Result<E> success() {
         Result<E> result = new Result<>();
-        result.setCode(1);
+        result.setCode(0);
+        result.msg = "";
         return result;
+    }
+
+    private void setCode(int i) {
+        this.status_code = i;
     }
 
     public static <E> Result<E> success(E data) {
         Result<E> result = new Result<>();
         result.data = data;
-        result.code = 1;
+        result.msg = "";
+        result.setCode(0);
         return result;
     }
 
     public static <E> Result<E> error(String msg) {
         Result<E> result = new Result<>();
         result.msg = msg;
-        result.code = 0;
+        result.setCode(1);
         return result;
     }
 
+    public static <E> Result<E> success(E data, String msg) {
+        Result<E> result = new Result<>();
+        result.data = data;
+        result.msg = msg;
+        result.setCode(0);
+        return result;
+    }
 }

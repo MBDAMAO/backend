@@ -60,7 +60,7 @@ public class UserController {
                 .token(token)
                 .build();
 
-        return Result.success(userLoginVO);
+        return Result.success(userLoginVO, "登录成功");
     }
 
     @PostMapping("/registry")
@@ -68,11 +68,8 @@ public class UserController {
         log.info("用户注册(●'◡'●){}", userRegistryDTO.getEmail());
         User user = userService.registry(userRegistryDTO);
 
-
-
         Map<String, Object> claims = new HashMap<>();
         claims.put("user_id", user.getUid());
-
 
         String token = JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
@@ -85,7 +82,7 @@ public class UserController {
                 .userName(user.getUsername())
                 .build();
 
-        return Result.success(userRegistryVO);
+        return Result.success(userRegistryVO, "注册成功");
     }
 
     /**
@@ -184,9 +181,15 @@ public class UserController {
     }
 
     @PostMapping("/verifyEmail")
-    public Result<?> verifyEmail(VerifyEmailDTO verifyEmailDTO){
+    public Result<?> verifyEmail(@RequestBody VerifyEmailDTO verifyEmailDTO){
         userService.verifyEmail(verifyEmailDTO);
-        return Result.success();
+        return Result.success(null, "邮箱验证成功");
+    }
+
+    @GetMapping("/emailCode")
+    public Result<?> getEmailCode(){
+        userService.getEmailCode();
+        return Result.success(null, "邮箱验证码已发送");
     }
 
     @GetMapping("/batchSelect")

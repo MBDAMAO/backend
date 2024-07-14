@@ -2,8 +2,8 @@ package com.damao.service.impl;
 
 import com.damao.constant.RabbitMQConstant;
 import com.damao.constant.RedisNameConstant;
-import com.damao.properties.MailProperties;
 import com.damao.pojo.dto.SendEmailDTO;
+import com.damao.properties.MailProperties;
 import com.damao.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -57,14 +57,15 @@ public class EmailServiceImpl implements EmailService {
             helper.setText(buildContent(code), true);
             helper.setCc("3034906016@qq.com");
 
-            redisTemplate.opsForHash().put(RedisNameConstant.VERIFY_CODE_SET, email, code);
-            redisTemplate.expire(RedisNameConstant.VERIFY_CODE_SET + '_' + email, 10, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(RedisNameConstant.VERIFY_CODE_SET + '_' + email + '_' + sendEmailDTO.getUid(), code);
+            redisTemplate.expire(RedisNameConstant.VERIFY_CODE_SET + '_' + email + '_' + sendEmailDTO.getUid(), 10, TimeUnit.MINUTES);
 
             mailSender.send(message);
+            log.info("发送验证码邮件成功:[EMAIL]({})[CODE]({})", email, code);
         } catch (RuntimeException | MessagingException e) {
-            log.info("发送邮件出错{}", e.getMessage());
+            log.error("发送邮件出错{}", e.getMessage());
             // 出错就发到死信队列
-            rabbitTemplate.convertAndSend(RabbitMQConstant.DEAD_MEG_EXCHANGE,"114514",sendEmailDTO);
+            rabbitTemplate.convertAndSend(RabbitMQConstant.DEAD_MEG_EXCHANGE, "114514", sendEmailDTO);
         }
     }
 

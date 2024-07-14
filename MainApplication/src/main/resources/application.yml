@@ -1,19 +1,36 @@
 server:
   port: 8081
+damao:
+  jwt:
+    adminSecretKey: damaoz
+    adminTtl: 86400000 # 1day
+    adminTokenName: token
+  mail:
+    host: smtp.qq.com
+    username: 3034906016@qq.com
+    password: hqdaqjmofxhodfic
 spring:
   application:
     name: main-application
   main:
     allow-circular-references: true
-  mail:
-    host: smtp.qq.com
-    port: 25
-    username: 3034906016@qq.com
-    password: hqdaqjmofxhodfic
   servlet:
     multipart:
       max-file-size: 200MB
       max-request-size: 400MB
+  mail:
+    port: 465
+    host: smtp.qq.com
+    username: 3034906016@qq.com
+    password: hqdaqjmofxhodfic
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          starttls:
+            enable: true
   redis:
     host: 62.234.48.195
     port: 6379
@@ -24,6 +41,8 @@ spring:
         min-idle: 0
         max-wait: -1
     timeout: 5000
+    database: 0
+    password: 1231Hh5867
   rabbitmq:
     host: 62.234.48.195
     port: 5672
@@ -60,13 +79,8 @@ spring:
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
       filters: stat,wall,slf4j
-#mybatis:
-#  mapper-locations: classpath:mapper/*.xml
-#  type-aliases-package: com.damao.pojo.entity
-#  configuration:
-#    map-underscore-to-camel-case: true
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.damao.pojo.entity
   configuration:
     map-underscore-to-camel-case: true

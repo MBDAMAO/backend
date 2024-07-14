@@ -9,6 +9,7 @@ import com.damao.mapper.UserMapper;
 import com.damao.pojo.entity.FollowerRelation;
 import com.damao.pojo.entity.User;
 import com.damao.pojo.vo.UserVO;
+import com.damao.pojo.dto.SendEmailDTO;
 import com.damao.result.exception.*;
 import com.damao.result.exception.PasswordErrorException;
 import com.damao.service.FollowerRelationService;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private FollowerRelationService followerRelationService;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -74,18 +75,20 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException("用户名已存在");
         }
         User newUser = new User();
-        String email = userRegistryDTO.getEmail();
 
-        SendEmailDTO send = new SendEmailDTO();
-        send.setEmail(email);
-
-
-        rabbitTemplate.convertAndSend(RabbitMQConstant.EXCHANGE,"123",send);
         BeanUtils.copyProperties(userRegistryDTO, newUser);
+        newUser.setAvatar("default png");
         String password = userRegistryDTO.getPassword();
         String newPassword = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
         newUser.setPassword(newPassword);
         userMapper.insert(newUser);
+        BaseContext.setCurrentId(newUser.getUid());
+        // 成功插入后再发邮件
+        String email = userRegistryDTO.getEmail();
+        SendEmailDTO send = new SendEmailDTO();
+        send.setEmail(email);
+        send.setUid(newUser.getUid());
+        rabbitTemplate.convertAndSend(RabbitMQConstant.EXCHANGE, "123", send);
         return newUser;
     }
 
@@ -111,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult getFollowersById(UserPageQueryDTO userPageQueryDTO) {
-        PageHelper.startPage(userPageQueryDTO.getPage(),userPageQueryDTO.getPageSize());
+        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
         Page<UserVO> myFollowers = userMapper.getFollowersById(userPageQueryDTO);
         if (myFollowers.isEmpty()) return new PageResult();
         List<Long> followedIdsList = followerRelationService.getFollowedById(userPageQueryDTO.getUid());
@@ -124,7 +127,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult getFollowedById(UserPageQueryDTO userPageQueryDTO) {
-        PageHelper.startPage(userPageQueryDTO.getPage(),userPageQueryDTO.getPageSize());
+        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
         Page<UserVO> myLikes = userMapper.getFollowedById(userPageQueryDTO);
         if (myLikes.isEmpty()) return new PageResult();
         List<Long> followerIdsList = followerRelationService.getFollowersById(userPageQueryDTO.getUid());
@@ -137,7 +140,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult getUsers(UserPageQueryDTO userPageQueryDTO) {
-        PageHelper.startPage(userPageQueryDTO.getPage(),userPageQueryDTO.getPageSize());
+        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
         Page<UserVO> page = userMapper.getUsers(userPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
     }
@@ -149,12 +152,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void unFollowUser(Long id) {
-        followerRelationService.remove(id,BaseContext.getCurrentId());
+        followerRelationService.remove(id, BaseContext.getCurrentId());
     }
 
     @Override
     public boolean followStatus(Long id) {
-        FollowerRelation followerRelation = followerRelationService.getStatus(BaseContext.getCurrentId(),id);
+        FollowerRelation followerRelation = followerRelationService.getStatus(BaseContext.getCurrentId(), id);
         return followerRelation != null;
     }
 
@@ -162,19 +165,33 @@ public class UserServiceImpl implements UserService {
     public void verifyEmail(VerifyEmailDTO verifyEmailDTO) {
         String email = verifyEmailDTO.getEmail();
         String code = verifyEmailDTO.getCode();
-        String code_ = (String) redisTemplate.opsForHash().get(RedisNameConstant.VERIFY_CODE_SET,email);
+        String code_ = (String) redisTemplate.opsForValue().get(RedisNameConstant.VERIFY_CODE_SET + '_' + email + '_' + BaseContext.getCurrentId());
         if (code_ == null) {
             throw new BaseException("验证码已过期或不存在");
         }
-        if (!code_.equals(code)){
+        if (!code_.equals(code)) {
             throw new BaseException("验证码错误");
         }
         log.info("验证成功");
+        User user = new User();
+        user.setUid(BaseContext.getCurrentId());
+        user.setEmailChecked(true);
+        update(user);
     }
 
     @Override
     public List<User> batchQueryByIds(List<Long> ids) {
         return userMapper.batchQueryByIds(ids);
+    }
+
+    @Override
+    public void getEmailCode() {
+        Long uid = BaseContext.getCurrentId();
+        User user = getById(uid);
+        SendEmailDTO sendEmailDTO = new SendEmailDTO();
+        sendEmailDTO.setEmail(user.getEmail());
+        sendEmailDTO.setUid(uid);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.EXCHANGE, "123", sendEmailDTO);
     }
 }
 

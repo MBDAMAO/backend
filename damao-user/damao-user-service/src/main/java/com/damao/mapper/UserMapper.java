@@ -21,7 +21,7 @@ public interface UserMapper {
     User getByUsername(String username);
 
     @AutoFill(OperationType.INSERT)
-    void insert(User newUser);
+    Long insert(User newUser);
 
     @AutoFill(OperationType.UPDATE)
     void update(User user);

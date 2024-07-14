@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.damao.mapper.UserMapper">
     <insert id="insert" useGeneratedKeys="true" keyProperty="uid">
-        insert into video_platform.users(username, email, password, sex, birthday, create_time, update_time)
-        VALUES (#{username}, #{email}, #{password}, #{sex}, #{birthday}, #{createTime}, #{updateTime});
+        insert into video_platform.users(username, email, password, sex, birthday, create_time, update_time, avatar)
+        VALUES (#{username}, #{email}, #{password}, #{sex}, #{birthday}, #{createTime}, #{updateTime}, #{avatar});
     </insert>
     <update id="update">
         update video_platform.users
@@ -23,6 +23,9 @@
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
+            </if>
+            <if test="emailChecked != null">
+                email_checked = #{emailChecked},
             </if>
         </set>
         where uid = #{uid};

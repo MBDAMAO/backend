@@ -24,6 +24,15 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     /**
+     *  捕获通用异常
+     */
+    @ExceptionHandler
+    public Result<?> exceptionHandler(Exception ex) {
+        log.error("异常信息：{}", ex.getMessage());
+        return Result.error(ex.getMessage());
+    }
+
+    /**
      * 捕获业务异常
      */
     @ExceptionHandler

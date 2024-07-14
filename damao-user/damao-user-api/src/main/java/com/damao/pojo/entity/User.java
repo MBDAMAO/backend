@@ -20,4 +20,6 @@ public class User extends BaseEntity implements Serializable {
     private String password;
     private Integer status;
     private String sex;
+    private String avatar;
+    private Boolean emailChecked;
 }

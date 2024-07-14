@@ -36,4 +36,6 @@ public interface UserService {
     boolean followStatus(Long id);
 
     List<User> batchQueryByIds(List<Long> ids);
+
+    void getEmailCode();
 }
