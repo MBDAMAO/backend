@@ -1,0 +1,16 @@
+server:
+  port: 8085
+damao:
+  jwt:
+    admin-secret-key: damaoz
+    admin-ttl: 7200000
+    admin-token-name: token
+spring:
+  application:
+    name: user-service
+  main:
+    allow-circular-references: true
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s

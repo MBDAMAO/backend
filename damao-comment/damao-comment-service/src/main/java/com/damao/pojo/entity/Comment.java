@@ -1,6 +1,7 @@
 package com.damao.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.damao.aspect.BaseEntity;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @TableName("comment")
 public class Comment extends BaseEntity {
+    @TableId
     private Long cid;
 
     @TableField("entity_id")

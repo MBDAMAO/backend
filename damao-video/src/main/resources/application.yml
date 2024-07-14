@@ -14,3 +14,12 @@ logging:
         mapper: debug
         service: info
         controller: info
+spring:
+  application:
+    name: video-service
+  main:
+    allow-circular-references: true
+  servlet:
+    multipart:
+      max-file-size: 200MB        # 设置单个文件最大大小为200MB
+      max-request-size: 400MB

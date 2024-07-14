@@ -1,16 +1,20 @@
 package com.damao;
 
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
+/**
+ * @author DM
+ * @since 2023/10/07
+ */
 @SpringBootApplication
-@MapperScan("com.damao.mapper")
+@EnableCaching
 @Slf4j
-public class CommentApplication {
+public class UserApplication {
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(CommentApplication.class);
+        SpringApplication application = new SpringApplication(UserApplication.class);
         application.run();
         log.info("服务启动╰(*°▽°*)╯");
     }

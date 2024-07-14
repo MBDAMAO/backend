@@ -1,14 +1,17 @@
 package com.damao.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.damao.service.UserService;
 import com.damao.context.BaseContext;
 import com.damao.context.IpContext;
-import com.damao.feign.UserService;
 import com.damao.mapper.CommentMapper;
 import com.damao.pojo.dto.PageDTO;
 import com.damao.pojo.dto.PublishCommentDTO;
 import com.damao.pojo.entity.Comment;
 import com.damao.service.CommentService;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl implements CommentService, BeanFactoryAware {
 
     @Autowired
     CommentMapper commentMapper;
@@ -29,11 +32,12 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     RedisTemplate<Long, Comment> redisTemplate2;
 
-    @Autowired
     UserService userService;
 
-    // @Autowired
-    // CommentStatisticsService statisticsService;
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.userService = beanFactory.getBean(UserService.class);
+    }
 
     @Override
     public PageDTO<?> getCommentsByEntity(Long entityId, Integer cursor) {
@@ -82,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
 
         // 根据每个comment里的uid查询用户个人信息
         List<Long> uidList = comments.stream().map(Comment::getUid).collect(Collectors.toList());
-        List<?> userInfoList = userService.query(uidList);
+        List<?> userInfoList = new ArrayList<>(); //userService.query(uidList);
 
         // 根据每个commentIds获取评论统计信息
         List<Long> cidList = comments.stream().map(Comment::getCid).collect(Collectors.toList());
@@ -140,5 +144,4 @@ public class CommentServiceImpl implements CommentService {
         // 风控Event
         // 通知Event
     }
-
 }

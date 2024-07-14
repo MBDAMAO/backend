@@ -1,7 +1,0 @@
-server:
-  port: 8080
-damao:
-  jwt:
-    admin-secret-key: damaoz
-    admin-ttl: 7200000
-    admin-token-name: token

@@ -1,0 +1,79 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: main-application
+  main:
+    allow-circular-references: true
+  mail:
+    host: smtp.qq.com
+    port: 25
+    username: 3034906016@qq.com
+    password: hqdaqjmofxhodfic
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 400MB
+  redis:
+    host: 62.234.48.195
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1
+    timeout: 5000
+  rabbitmq:
+    host: 62.234.48.195
+    port: 5672
+    username: damao
+    password: 1231h5867
+    virtual-host: /
+    connection-timeout: 15000
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          multiplier: 1.5
+          max-interval: 10000
+
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://62.234.48.195:3306/video_platform?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      username: damao
+      password: 1231Hh5867
+
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,slf4j
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: com.damao.pojo.entity
+#  configuration:
+#    map-underscore-to-camel-case: true
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.damao.pojo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com:
+      damao:
+        mapper: debug
+        service: info
+        controller: info

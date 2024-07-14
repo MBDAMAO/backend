@@ -3,8 +3,10 @@ package com.damao.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
 
 @Slf4j
 @Component
@@ -14,12 +16,13 @@ public class IpUtil {
     private static Searcher searcher;
 
 
-    IpUtil() {
-        String dbPath = "src/main/resources/ip2region.xdb";
+    IpUtil() throws FileNotFoundException {
+        String dbPath = ResourceUtils.getFile("classpath:ip2region.xdb").toString();
         // 1、从 dbPath 加载整个 xdb 到内存。
         byte[] cBuff = new byte[0];
         try {
             cBuff = Searcher.loadContentFromFile(dbPath);
+            log.info("成功加载ip2region.xdb文件");
         } catch (Exception e) {
             log.info("failed to load content from {}: {}\n", dbPath, e);
         }

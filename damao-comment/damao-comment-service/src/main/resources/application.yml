@@ -12,3 +12,8 @@ logging:
         mapper: debug
         service: info
         controller: info
+spring:
+  application:
+    name: comment-service
+  main:
+    allow-circular-references: true
