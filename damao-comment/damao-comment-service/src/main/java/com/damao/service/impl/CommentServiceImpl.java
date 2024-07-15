@@ -1,7 +1,6 @@
 package com.damao.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.damao.service.UserService;
 import com.damao.context.BaseContext;
 import com.damao.context.IpContext;
 import com.damao.mapper.CommentMapper;
@@ -9,6 +8,7 @@ import com.damao.pojo.dto.PageDTO;
 import com.damao.pojo.dto.PublishCommentDTO;
 import com.damao.pojo.entity.Comment;
 import com.damao.service.CommentService;
+import com.damao.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

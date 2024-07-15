@@ -4,6 +4,7 @@ import com.damao.context.BaseContext;
 import com.damao.properties.JwtProperties;
 import com.damao.result.PageResult;
 import com.damao.result.Result;
+import com.damao.service.UserService;
 import com.damao.utils.JwtUtil;
 import com.damao.pojo.dto.UserLoginDTO;
 import com.damao.pojo.dto.UserPageQueryDTO;
@@ -13,7 +14,6 @@ import com.damao.pojo.entity.User;
 import com.damao.pojo.vo.UserLoginVO;
 import com.damao.pojo.vo.UserRegistryVO;
 import com.damao.pojo.vo.UserVO;
-import com.damao.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,7 @@ public class UserController {
         return Result.success();
     }
 
-    @GetMapping("/getById/{id}")
+    @GetMapping("/{id}")
     public Result<UserVO> getById(@PathVariable Long id) {
         User user = userService.getById(id);
         if (user == null) {
@@ -110,7 +110,7 @@ public class UserController {
         return Result.success(userVO);
     }
 
-    @GetMapping("/getSelf")
+    @GetMapping("/self")
     public Result<UserVO> getSelf(){
         User user = userService.getById(BaseContext.getCurrentId());
         if (user == null) {

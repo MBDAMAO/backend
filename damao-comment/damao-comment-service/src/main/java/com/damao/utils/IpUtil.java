@@ -24,7 +24,7 @@ public class IpUtil {
             cBuff = Searcher.loadContentFromFile(dbPath);
             log.info("成功加载ip2region.xdb文件");
         } catch (Exception e) {
-            log.info("failed to load content from {}: {}\n", dbPath, e);
+            log.info("failed to load content from {}: {}\n", dbPath, e.toString());
         }
 
         // 2、使用上述的 cBuff 创建一个完全基于内存的查询对象。
@@ -43,13 +43,13 @@ public class IpUtil {
      */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (ip == null || ip.isEmpty() || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (ip == null || ip.isEmpty() || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (ip == null || ip.isEmpty() || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
@@ -59,7 +59,7 @@ public class IpUtil {
         try {
             return searcher.searchByStr(ip);
         } catch (Exception e) {
-            log.info("failed to search({}): {}\n", ip, e);
+            log.info("failed to search({}): {}\n", ip, e.toString());
         }
         return null;
     }

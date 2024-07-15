@@ -80,7 +80,8 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       filters: stat,wall,slf4j
 mybatis-plus:
-  mapper-locations: classpath*:mapper/*.xml
+
+  mapper-locations: classpath*:com/damao/**/mapper/*.xml #classpath*:mapper/*.xml
   type-aliases-package: com.damao.pojo.entity
   configuration:
     map-underscore-to-camel-case: true

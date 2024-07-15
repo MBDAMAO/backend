@@ -19,8 +19,14 @@
     <dependencies>
         <dependency>
             <groupId>com.damao</groupId>
-            <artifactId>damao-user-model</artifactId>
+            <artifactId>damao-comment-api</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.damao</groupId>
+            <artifactId>damao-user-api</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
