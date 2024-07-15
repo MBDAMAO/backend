@@ -86,7 +86,7 @@ public class CommentServiceImpl implements CommentService, BeanFactoryAware {
 
         // 根据每个comment里的uid查询用户个人信息
         List<Long> uidList = comments.stream().map(Comment::getUid).collect(Collectors.toList());
-        List<?> userInfoList = new ArrayList<>(); //userService.query(uidList);
+        List<?> userInfoList = userService.batchQueryByIds(uidList);
 
         // 根据每个commentIds获取评论统计信息
         List<Long> cidList = comments.stream().map(Comment::getCid).collect(Collectors.toList());

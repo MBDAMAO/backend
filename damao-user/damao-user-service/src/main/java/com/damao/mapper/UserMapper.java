@@ -1,6 +1,7 @@
 package com.damao.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.damao.annotation.AutoFill;
 import com.damao.enumeration.OperationType;
 import com.damao.pojo.dto.UserPageQueryDTO;
@@ -13,7 +14,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
     @Select("select * from video_platform.users where uid = #{uid}")
     User getById(Long uid);
 
@@ -21,7 +22,7 @@ public interface UserMapper {
     User getByUsername(String username);
 
     @AutoFill(OperationType.INSERT)
-    Long insert(User newUser);
+    int insert(User newUser);
 
     @AutoFill(OperationType.UPDATE)
     void update(User user);

@@ -15,6 +15,7 @@
     <modules>
         <module>damao-user-api</module>
         <module>damao-user-service</module>
+        <module>damao-user-model</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

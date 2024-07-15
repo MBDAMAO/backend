@@ -188,6 +188,9 @@ public class UserServiceImpl implements UserService {
     public void getEmailCode() {
         Long uid = BaseContext.getCurrentId();
         User user = getById(uid);
+        if (user.getEmailChecked()) {
+            throw new BaseException("邮箱已验证");
+        }
         SendEmailDTO sendEmailDTO = new SendEmailDTO();
         sendEmailDTO.setEmail(user.getEmail());
         sendEmailDTO.setUid(uid);
