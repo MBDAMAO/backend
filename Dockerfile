@@ -22,4 +22,4 @@ EXPOSE 8081
 
 # 定义容器启动后执行的命令，这里假设你的应用是一个Spring Boot应用
 # 如果是其他类型的应用，需要替换为相应的启动命令
-CMD ["java", "$JAVA_OPTS", "-jar", "target/MainApplication-1.0.0.jar"]
+CMD ["java", "$$JAVA_OPTS", "-jar", "target/MainApplication-1.0.0.jar"]
