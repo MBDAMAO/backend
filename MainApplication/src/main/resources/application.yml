@@ -12,6 +12,9 @@ damao:
 spring:
   application:
     name: main-application
+  output:
+    ansi:
+      enabled: ALWAYS # enable color print
   main:
     allow-circular-references: true
   servlet:
