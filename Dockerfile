@@ -15,7 +15,7 @@ RUN chmod +x mvnw
 
 # 构建项目，这里假设你使用Maven作为构建工具
 # 如果你使用其他构建工具，例如Gradle，请替换为相应的命令
-RUN ./mvnw clean package
+RUN ./mvnw package
 
 # 暴露端口，根据你的应用需求设置
 EXPOSE 8081
