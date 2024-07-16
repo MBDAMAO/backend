@@ -2,11 +2,15 @@ package com.damao.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.Searcher;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Slf4j
 @Component
@@ -16,22 +20,18 @@ public class IpUtil {
     private static Searcher searcher;
 
 
-    IpUtil() throws FileNotFoundException {
-        String dbPath = ResourceUtils.getFile("classpath:ip2region.xdb").toString();
-        // 1、从 dbPath 加载整个 xdb 到内存。
-        byte[] cBuff = new byte[0];
-        try {
-            cBuff = Searcher.loadContentFromFile(dbPath);
-            log.info("成功加载ip2region.xdb文件");
-        } catch (Exception e) {
-            log.info("failed to load content from {}: {}\n", dbPath, e.toString());
-        }
+    IpUtil() throws IOException {
+        // 使用ClassPathResource来获取资源文件
+        Resource resource = new ClassPathResource("ip2region.xdb");
+        try (InputStream inputStream = resource.getInputStream()) {
+            // 读取文件到byte数组
+            byte[] data = inputStream.readAllBytes();
 
-        // 2、使用上述的 cBuff 创建一个完全基于内存的查询对象。
-        try {
-            searcher = Searcher.newWithBuffer(cBuff);
-        } catch (Exception e) {
-            log.info("failed to create content cached searcher: %s\n", e);
+            // 使用byte数组创建Searcher对象
+            searcher = Searcher.newWithBuffer(data);
+            log.info("成功读入ip2region.xdb");
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to read ip2region.xdb", e);
         }
     }
 

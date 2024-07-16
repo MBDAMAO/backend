@@ -56,8 +56,8 @@ public class TaskManager {
             Map.Entry<Object, Object> entry = cursor.next();
             String key = (String) entry.getKey();
             String[] split = key.split(":");
-            Long uid = new Long(split[0]);
-            Long vid = new Long(split[1]);
+            Long uid = Long.valueOf(split[0]);
+            Long vid = Long.valueOf(split[1]);
             Integer value = (Integer) entry.getValue();
             VideoLikesRelation videoLikesRelation = videoService.getLikeRelation(uid,vid);
             if (videoLikesRelation == null) {
