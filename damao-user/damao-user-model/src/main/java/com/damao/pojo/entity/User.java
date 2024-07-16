@@ -1,6 +1,7 @@
 package com.damao.pojo.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.damao.aspect.BaseEntity;
@@ -16,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @TableName("users")
 public class User extends BaseEntity implements Serializable {
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long uid;
     private String username;
     private Date birthday;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.damao.mapper.CommentMapper">
-    <select id="queryByEntity" resultType="com.damao.pojo.entity.Comment">
+    <select id="queryByEntity" resultType="com.damao.Comment">
         <if test="cursor != null">
             SELECT *
             from video_platform.comment

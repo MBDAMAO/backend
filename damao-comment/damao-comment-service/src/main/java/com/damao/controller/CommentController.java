@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 public class CommentController {
 
-    @GetMapping("/videoComments/{vid}")
+    @GetMapping("/list/{vid}")
     public Result<?> getVideoComments(@PathVariable Long vid, @RequestParam Integer cursor) {
         CommentVO comment = CommentVO.builder()
                 .uid(123L)
@@ -36,7 +36,7 @@ public class CommentController {
     }
 
     // 获取某顶级评论子评论
-    @GetMapping("/subComments/{cid}")
+    @GetMapping("/clist/{cid}")
     public Result<?> getNextComments(@PathVariable Long cid) {
 
         return Result.success();
