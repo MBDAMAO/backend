@@ -174,14 +174,14 @@
     </build>
     <repositories>
         <repository>
-            <id>tencent</id>
-            <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+            <id>alimaven</id>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>tencent</id>
-            <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+            <id>alimaven</id>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
         </pluginRepository>
     </pluginRepositories>
 </project>
