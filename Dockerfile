@@ -15,8 +15,8 @@ WORKDIR /app
 RUN ./mvnw clean package
 
 # 暴露端口，根据你的应用需求设置
-EXPOSE 8080
+EXPOSE 8081
 
 # 定义容器启动后执行的命令，这里假设你的应用是一个Spring Boot应用
 # 如果是其他类型的应用，需要替换为相应的启动命令
-CMD ["java", "$JAVA_OPTS", "-jar", "target/your-app.jar"]
+CMD ["java", "$JAVA_OPTS", "-jar", "target/MainApplication-1.0.0.jar"]
