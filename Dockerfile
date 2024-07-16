@@ -1,5 +1,5 @@
 # 使用官方Java镜像作为基础镜像
-FROM openjdk:8-jdk
+FROM openjdk:17-jdk
 
 # 设置环境变量，例如JAVA_OPTS可以用于设置JVM参数
 ENV JAVA_OPTS="-Xmx1024m"
