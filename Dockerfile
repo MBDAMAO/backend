@@ -10,6 +10,9 @@ COPY . /app
 # 切换工作目录为/app
 WORKDIR /app
 
+# 安装Maven
+RUN apt-get update && apt-get install -y maven
+
 # 构建项目，这里假设你使用Maven作为构建工具
 # 如果你使用其他构建工具，例如Gradle，请替换为相应的命令
 RUN ./mvnw clean package
