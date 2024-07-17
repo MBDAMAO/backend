@@ -38,7 +38,7 @@
         <cos>5.6.191</cos>
         <aspectj>1.9.4</aspectj>
         <aspectjweaver>1.9.4</aspectjweaver>
-        <druid>1.2.1</druid>
+        <druid>1.2.8</druid>
     </properties>
 
     <dependencyManagement>
@@ -88,19 +88,41 @@
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
+                <artifactId>druid</artifactId>
                 <version>${druid}</version>
             </dependency>
-            <!--自己写的starter-->
-<!--            <dependency>-->
-<!--                <groupId>mystater-spring-boot-starter</groupId>-->
-<!--                <artifactId>MyStater</artifactId>-->
-<!--                <version>1.0-SNAPSHOT</version>-->
-<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
+
+        <!--我用的是JDK17 在JDK8后缺少这几个依赖，会导致Sharding jdbc整合失败-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <!--我用的是JDK17 在JDK8后缺少这几个依赖，会导致Sharding jdbc整合失败-->
+
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>4.0.0</version>
+        </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -173,16 +195,16 @@
             </plugins>
         </pluginManagement>
     </build>
-    <repositories>
-        <repository>
-            <id>maven.org</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven.org</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>maven.org</id>-->
+    <!--            <url>https://repo1.maven.org/maven2/</url>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
+    <!--    <pluginRepositories>-->
+    <!--        <pluginRepository>-->
+    <!--            <id>maven.org</id>-->
+    <!--            <url>https://repo1.maven.org/maven2/</url>-->
+    <!--        </pluginRepository>-->
+    <!--    </pluginRepositories>-->
 </project>
