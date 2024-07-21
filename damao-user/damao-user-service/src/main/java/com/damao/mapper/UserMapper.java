@@ -2,12 +2,12 @@ package com.damao.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.damao.annotation.AutoFill;
 import com.damao.enumeration.OperationType;
 import com.damao.pojo.dto.UserPageQueryDTO;
 import com.damao.pojo.entity.User;
 import com.damao.pojo.vo.UserVO;
-import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

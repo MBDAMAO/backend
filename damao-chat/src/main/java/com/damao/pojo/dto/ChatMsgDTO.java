@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ChatMsgDTO implements Serializable {
-    private Long fromUid;
     private Long[] toUid;
     private String msg;
-    private LocalDateTime time;
+    private String time;
 }

@@ -19,42 +19,42 @@ spring:
   main:
     allow-circular-references: true
 
-  shardingsphere:
-    enabled: true
-    datasource:
-      names: ds0
-      ds0:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://62.234.48.195:3306/video_platform?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-        username: damao
-        password: 1231Hh5867
+#  shardingsphere:
+#    enabled: true
+#    datasource:
+#      names: ds0
+#      ds0:
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://62.234.48.195:3306/video_platform?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+#        username: damao
+#        password: 1231Hh5867
+#
+#        initial-size: 5
+#        min-idle: 5
+#        max-active: 20
+#        max-wait: 60000
+#        time-between-eviction-runs-millis: 60000
+#        min-evictable-idle-time-millis: 300000
+#        validation-query: SELECT 1 FROM DUAL
+#        test-while-idle: true
+#        test-on-borrow: false
+#        test-on-return: false
+#        pool-prepared-statements: true
+#        max-pool-prepared-statement-per-connection-size: 20
+#        filters: stat,wall,slf4j
 
-        initial-size: 5
-        min-idle: 5
-        max-active: 20
-        max-wait: 60000
-        time-between-eviction-runs-millis: 60000
-        min-evictable-idle-time-millis: 300000
-        validation-query: SELECT 1 FROM DUAL
-        test-while-idle: true
-        test-on-borrow: false
-        test-on-return: false
-        pool-prepared-statements: true
-        max-pool-prepared-statement-per-connection-size: 20
-        filters: stat,wall,slf4j
-
-    sharding:
-      tables:
-        t_user_login:
-          actualDataNodes: ds0.t_user_login${0..2}
-          tableStrategy:
-            inline:
-              shardingColumn: username
-              algorithmExpression: t_user_login${uid % 3}
-          keyGenerator:
-            type: SNOWFLAKE
-            column: username
+#    sharding:
+#      tables:
+#        t_user_login:
+#          actualDataNodes: ds0.t_user_login${0..2}
+#          tableStrategy:
+#            inline:
+#              shardingColumn: username
+#              algorithmExpression: t_user_login${uid % 3}
+#          keyGenerator:
+#            type: SNOWFLAKE
+#            column: username
 
   servlet:
     multipart:
@@ -101,25 +101,27 @@ spring:
           multiplier: 1.5
           max-interval: 10000
 
-#druid:
-#  driver-class-name: com.mysql.cj.jdbc.Driver
-#  url: jdbc:mysql://62.234.48.195:3306/video_platform?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-#  username: damao
-#  password: 1231Hh5867
-#
-#  initial-size: 5
-#  min-idle: 5
-#  max-active: 20
-#  max-wait: 60000
-#  time-between-eviction-runs-millis: 60000
-#  min-evictable-idle-time-millis: 300000
-#  validation-query: SELECT 1 FROM DUAL
-#  test-while-idle: true
-#  test-on-borrow: false
-#  test-on-return: false
-#  pool-prepared-statements: true
-#  max-pool-prepared-statement-per-connection-size: 20
-#  filters: stat,wall,slf4j
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://62.234.48.195:3306/video_platform?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      username: damao
+      password: 1231Hh5867
+
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,slf4j
+
 mybatis-plus:
 
   mapper-locations: classpath*:com/damao/**/mapper/*.xml #classpath*:mapper/*.xml

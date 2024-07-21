@@ -1,5 +1,7 @@
 package com.damao.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.damao.constant.RabbitMQConstant;
 import com.damao.constant.RedisNameConstant;
 import com.damao.context.BaseContext;
@@ -14,8 +16,6 @@ import com.damao.result.exception.*;
 import com.damao.result.exception.PasswordErrorException;
 import com.damao.service.FollowerRelationService;
 import com.damao.service.UserService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
@@ -114,35 +114,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult getFollowersById(UserPageQueryDTO userPageQueryDTO) {
-        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
-        Page<UserVO> myFollowers = userMapper.getFollowersById(userPageQueryDTO);
-        if (myFollowers.isEmpty()) return new PageResult();
+//        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
+        IPage<UserVO> myFollowers = userMapper.getFollowersById(userPageQueryDTO);
+        if (myFollowers.getTotal() == 0) return new PageResult();
         List<Long> followedIdsList = followerRelationService.getFollowedById(userPageQueryDTO.getUid());
         HashSet<Long> followedIds = new HashSet<>(followedIdsList);
-        for (UserVO myFollow : myFollowers) {
+        for (UserVO myFollow : myFollowers.getRecords()) {
             myFollow.setFollowedTogether(followedIds.contains(myFollow.getUid()));
         }
-        return new PageResult(myFollowers.getTotal(), myFollowers.getResult());
+        return new PageResult(myFollowers.getTotal(), myFollowers.getRecords());
     }
 
     @Override
     public PageResult getFollowedById(UserPageQueryDTO userPageQueryDTO) {
-        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
-        Page<UserVO> myLikes = userMapper.getFollowedById(userPageQueryDTO);
-        if (myLikes.isEmpty()) return new PageResult();
+//        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
+        IPage<UserVO> myLikes = userMapper.getFollowedById(userPageQueryDTO);
+        if (myLikes.getTotal() == 0) return new PageResult();
         List<Long> followerIdsList = followerRelationService.getFollowersById(userPageQueryDTO.getUid());
         HashSet<Long> followerIds = new HashSet<>(followerIdsList);
-        for (UserVO myLike : myLikes) {
+        for (UserVO myLike : myLikes.getRecords()) {
             myLike.setFollowedTogether(followerIds.contains(myLike.getUid()));
         }
-        return new PageResult(myLikes.getTotal(), myLikes.getResult());
+        return new PageResult(myLikes.getTotal(), myLikes.getRecords());
     }
 
     @Override
     public PageResult getUsers(UserPageQueryDTO userPageQueryDTO) {
-        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
+////        PageHelper.startPage(userPageQueryDTO.getPage(), userPageQueryDTO.getPageSize());
         Page<UserVO> page = userMapper.getUsers(userPageQueryDTO);
-        return new PageResult(page.getTotal(), page.getResult());
+        return new PageResult(page.getTotal(), page.getRecords());
     }
 
     @Override

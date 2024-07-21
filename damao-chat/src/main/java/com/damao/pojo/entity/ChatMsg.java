@@ -1,14 +1,15 @@
 package com.damao.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 public class ChatMsg implements Serializable {
-    private Long fromUid;
-    private Long toUid;
+    private String fromUid;
+    private String toUid;
     private String msg;
-    private LocalDateTime time;
+    @TableField("send_time")
+    private String time;
 }
