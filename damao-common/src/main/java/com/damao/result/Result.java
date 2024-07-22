@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class Result<E> implements Serializable {
-    private Integer status_code;
+    private Integer statusCode;
     private String msg;
     private E data;
 
@@ -22,7 +22,7 @@ public class Result<E> implements Serializable {
     }
 
     private void setCode(int i) {
-        this.status_code = i;
+        this.statusCode = i;
     }
 
     public static <E> Result<E> success(E data) {

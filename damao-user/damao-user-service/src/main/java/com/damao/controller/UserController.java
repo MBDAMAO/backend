@@ -186,6 +186,13 @@ public class UserController {
         return Result.success(null, "邮箱验证成功");
     }
 
+    @GetMapping("/verify")
+    public Map<String, Object> verify(){
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("valid", true);
+        return claims;
+    }
+
     @GetMapping("/emailCode")
     public Result<?> getEmailCode(){
         userService.getEmailCode();
