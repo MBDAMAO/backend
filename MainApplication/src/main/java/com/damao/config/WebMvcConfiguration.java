@@ -5,7 +5,10 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
+
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -33,6 +36,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 SerializerFeature.WriteDateUseDateFormat,
                 SerializerFeature.WriteEnumUsingToString
         );
+        JSON.config(JSONReader.Feature.SupportSmartMatch);
         List<MediaType> supportedMediaTypes = new ArrayList<>();
         supportedMediaTypes.add(MediaType.APPLICATION_JSON);
         supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
@@ -54,11 +58,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
         converter.setSupportedMediaTypes(supportedMediaTypes);
         SerializeConfig.getGlobalInstance().propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
-        ParserConfig parserConfig = new ParserConfig(); // 生产环境中，parserConfig要做singleton处理，要不然会存在性能问题
+        ParserConfig parserConfig = new ParserConfig();
         fastJsonConfig.setParserConfig(parserConfig);
         converter.setFastJsonConfig(fastJsonConfig);
         converters.add(0, converter);
     }
-
-
 }
