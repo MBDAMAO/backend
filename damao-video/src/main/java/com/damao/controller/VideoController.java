@@ -49,7 +49,7 @@ public class VideoController {
         return Result.success(videoService.getDailyTopTenViewVideos());
     }
 
-    @GetMapping("/recommend")
+    @GetMapping("/feed")
     public Result<List<Video>> recommend() {
         List<Video> res = videoRecommendService.get();
         return Result.success(res);
