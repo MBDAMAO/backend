@@ -1,5 +1,8 @@
 package com.damao.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.damao.aspect.BaseEntity;
 import lombok.*;
 
@@ -10,7 +13,9 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("videos")
 public class Video extends BaseEntity implements Serializable {
+    @TableId
     private Long vid;
     private String videoName;
     private String videoCoverUrl;
@@ -19,6 +24,8 @@ public class Video extends BaseEntity implements Serializable {
     private Integer likes;
     private Integer saves;
     private Integer shares;
+    @TableField("judge_status")
     private Integer auditStatus;
+    @TableField("judge_result")
     private Integer auditResult;
 }

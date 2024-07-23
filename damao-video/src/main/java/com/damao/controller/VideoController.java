@@ -1,6 +1,8 @@
 package com.damao.controller;
 
 import com.damao.pojo.entity.Video;
+import com.damao.pojo.vo.FeedItemVO;
+import com.damao.pojo.vo.HomeFeedVO;
 import com.damao.pojo.vo.VideoRankVO;
 import com.damao.result.Result;
 import com.damao.service.VideoRecommendService;
@@ -49,9 +51,21 @@ public class VideoController {
         return Result.success(videoService.getDailyTopTenViewVideos());
     }
 
-    @GetMapping("/feed")
+    @GetMapping("/randomFeed")
     public Result<List<Video>> recommend() {
         List<Video> res = videoRecommendService.get();
+        return Result.success(res);
+    }
+
+    @GetMapping("/feed")
+    public Result<List<FeedItemVO>> feed() {
+        List<FeedItemVO> res = videoRecommendService.feed();
+        return Result.success(res);
+    }
+
+    @GetMapping("/home_feed")
+    public Result<List<HomeFeedVO>> homeFeed() {
+        List<HomeFeedVO> res = videoRecommendService.homeFeed();
         return Result.success(res);
     }
 

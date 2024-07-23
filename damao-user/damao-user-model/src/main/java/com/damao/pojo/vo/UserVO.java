@@ -21,6 +21,7 @@ public class UserVO extends BaseEntity implements Serializable {
     private String password;
     private Integer status;
     private String sex;
+    private String avatar;
     /**
      *  用以判断是否互相关注
      */

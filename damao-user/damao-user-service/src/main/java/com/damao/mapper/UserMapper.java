@@ -36,5 +36,5 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("SELECT like_vector from video_platform.user_model where uid=#{uid}")
     String getModel(Long uid);
 
-    List<User> batchQueryByIds(List<Long> ids);
+//    List<User> batchQueryByIds(List<Long> ids);
 }

@@ -38,4 +38,6 @@ public interface UserService {
     List<User> batchQueryByIds(List<Long> ids);
 
     void getEmailCode();
+
+    List<User> getByIds(List<Long> uidList);
 }

@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> batchQueryByIds(List<Long> ids) {
-        return userMapper.batchQueryByIds(ids);
+        return userMapper.selectBatchIds(ids);
     }
 
     @Override
@@ -195,6 +195,12 @@ public class UserServiceImpl implements UserService {
         sendEmailDTO.setEmail(user.getEmail());
         sendEmailDTO.setUid(uid);
         rabbitTemplate.convertAndSend(RabbitMQConstant.EXCHANGE, "123", sendEmailDTO);
+    }
+
+    @Override
+    public List<User> getByIds(List<Long> uidList) {
+        List<User> users = userMapper.selectBatchIds(uidList);
+        return users;
     }
 }
 

@@ -2,6 +2,10 @@ package com.damao.service.impl;
 
 import com.damao.constant.RedisNameConstant;
 import com.damao.context.BaseContext;
+import com.damao.pojo.entity.User;
+import com.damao.pojo.vo.FeedItemVO;
+import com.damao.pojo.vo.HomeFeedVO;
+import com.damao.service.UserService;
 import com.damao.utils.RandomUtil;
 import com.damao.mapper.VideoMapper;
 import com.damao.pojo.entity.Video;
@@ -14,12 +18,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VideoRecommendServiceImpl implements VideoRecommendService {
 
     @Autowired
     VideoMapper videoMapper;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
@@ -76,5 +84,73 @@ public class VideoRecommendServiceImpl implements VideoRecommendService {
     public List<Video> recommendSimilar(Long vid) {
         redisTemplate.opsForHash();
         return null;
+    }
+
+    @Override
+    public List<FeedItemVO> feed() {
+        List<Long> list = new ArrayList<>();
+        list.add(113L);
+        list.add(114L);
+        list.add(115L);
+        list.add(116L);
+        List<Video> videos = videoMapper.selectBatchIds(list);
+        List<FeedItemVO> feedItemVOList = new ArrayList<>();
+        List<Long> uidList = videos.stream().map(Video::getOwnerId).toList();
+        List<Long> vidList = videos.stream().map(Video::getVid).toList();
+        List<User> authors = userService.getByIds(uidList);
+        Map<Long, User> authorMap = authors.stream().collect(Collectors.toMap(User::getUid, a -> a, (v1, v2) -> v1));
+        for (Video video : videos) {
+            FeedItemVO feedItemVO = new FeedItemVO();
+            FeedItemVO.Video videoVO = new FeedItemVO.Video();
+            FeedItemVO.Author authorVO = new FeedItemVO.Author();
+            User user = authorMap.get(video.getOwnerId());
+            // 组装作者信息
+            authorVO.setNickname(user.getUsername());
+            authorVO.setUid(String.valueOf(user.getUid()));
+            authorVO.setHeadImg(user.getAvatar());
+            authorVO.setFollowStatus(1L);
+            // 组装videoVO
+            videoVO.setCover(video.getVideoCoverUrl());
+            videoVO.setSrc(video.getVideoUrl());
+            videoVO.setTitle(video.getVideoName());
+            videoVO.setPublishTime(video.getCreateTime());
+            videoVO.setSaveStatus(false);
+            videoVO.setLikeStatus(false);
+            videoVO.setTags("这是taghhh 这是taghhh");
+            // 组装统计数据
+            FeedItemVO.Statistics statisticsVO = new FeedItemVO.Statistics();
+            statisticsVO.setCommentCount(12L);
+            statisticsVO.setPlayCount(1231L);
+            statisticsVO.setLikeCount(1231L);
+            statisticsVO.setShareCount(447L);
+            statisticsVO.setSaveCount(114L);
+
+            feedItemVO.setVideo(videoVO);
+            feedItemVO.setAuthor(authorVO);
+            feedItemVO.setStatistics(statisticsVO);
+            feedItemVO.setFeedType(1L);
+            feedItemVO.setFeedItemId(video.getVid());
+            feedItemVOList.add(feedItemVO);
+        }
+        return feedItemVOList;
+    }
+
+    @Override
+    public List<HomeFeedVO> homeFeed() {
+        List<Long> list = new ArrayList<>();
+        list.add(113L);
+        list.add(114L);
+        list.add(115L);
+        list.add(116L);
+        List<Video> videos = videoMapper.selectBatchIds(list);
+        List<HomeFeedVO> feedItemVOList = new ArrayList<>();
+        for (Video video : videos) {
+            HomeFeedVO homeFeedVO = new HomeFeedVO();
+            homeFeedVO.setCover(video.getVideoCoverUrl());
+            homeFeedVO.setCreateTime(video.getCreateTime());
+            homeFeedVO.setTitle(video.getVideoName());
+            feedItemVOList.add(homeFeedVO);
+        }
+        return feedItemVOList;
     }
 }

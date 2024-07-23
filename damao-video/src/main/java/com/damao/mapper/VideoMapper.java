@@ -1,5 +1,6 @@
 package com.damao.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.damao.annotation.AutoFill;
 import com.damao.enumeration.OperationType;
 import com.damao.pojo.entity.Video;
@@ -11,7 +12,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface VideoMapper {
+public interface VideoMapper extends BaseMapper<Video> {
 
     @AutoFill(OperationType.INSERT)
     void save(Video video);
