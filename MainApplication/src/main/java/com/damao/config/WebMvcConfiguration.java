@@ -53,15 +53,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         supportedMediaTypes.add(MediaType.TEXT_XML);
 
         converter.setSupportedMediaTypes(supportedMediaTypes);
-        SerializeConfig config = new SerializeConfig(); // 生产环境中，config要做singleton处理，要不然会存在性能问题
-        config.propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
-
-
+        SerializeConfig.getGlobalInstance().propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
         ParserConfig parserConfig = new ParserConfig(); // 生产环境中，parserConfig要做singleton处理，要不然会存在性能问题
-//        parserConfig.propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
-
         fastJsonConfig.setParserConfig(parserConfig);
-        fastJsonConfig.setSerializeConfig(config);
         converter.setFastJsonConfig(fastJsonConfig);
         converters.add(0, converter);
     }
