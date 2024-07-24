@@ -95,13 +95,24 @@ public class WebSocket implements BeanFactoryAware, InitializingBean {
         chatMsgDTO.put("fromUid", uid);
         List<String> toUid = (List<String>) chatMsgDTO.get("toUid");
         ChatMsg chatMsg = new ChatMsg();
-        chatMsg.setMsg(msg);
-        chatMsg.setTime(LocalDateTime.now().format(formatter));
+        ChatMsg chatMsgReverse = new ChatMsg();
+        String localDateTime = LocalDateTime.now().format(formatter);
+
+        chatMsgReverse.setToUid(uid);
+        chatMsgReverse.setMsg(msg);
+        chatMsgReverse.setFromUid(toUid.get(0));
+        chatMsgReverse.setTime(localDateTime);
+        chatMsgReverse.setIsMyMsg(false);
+
         chatMsg.setFromUid(uid);
+        chatMsg.setMsg(msg);
         chatMsg.setToUid(toUid.get(0));
-//        BeanUtils.copyProperties(chatMsgDTO, chatMsg);
-        chatMsg.setToUid(((List<String>) chatMsgDTO.get("toUid")).get(0));
+        chatMsg.setTime(localDateTime);
+        chatMsg.setIsMyMsg(true);
+
+
         if (toUid.size() == 1) {
+            chatService.insert(chatMsgReverse);
             chatService.insert(chatMsg);
             sendOneMessage(toUid.get(0), JSON.toJSONString(chatMsgDTO));
         } else {

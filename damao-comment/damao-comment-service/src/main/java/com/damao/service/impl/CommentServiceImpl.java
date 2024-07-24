@@ -1,12 +1,14 @@
 package com.damao.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.damao.context.BaseContext;
 import com.damao.context.IpContext;
 import com.damao.mapper.CommentMapper;
 import com.damao.pojo.dto.PageDTO;
 import com.damao.pojo.dto.PublishCommentDTO;
 import com.damao.pojo.entity.Comment;
+import com.damao.pojo.entity.User;
 import com.damao.service.CommentService;
 import com.damao.service.UserService;
 import org.springframework.beans.BeansException;
@@ -46,7 +48,32 @@ public class CommentServiceImpl implements CommentService, BeanFactoryAware {
         Set<String> commentIdx = Objects.requireNonNull(redisTemplate.opsForZSet()
                 .rangeByScore("reply_index:" + entityId, cursor, 20));
         if (commentIdx.isEmpty()) {
-            return null;
+            QueryWrapper<Comment> wrapper = new QueryWrapper<>();
+            wrapper.eq("entity_id", entityId);
+            wrapper.orderByDesc("create_time");
+            wrapper.last("limit 20");
+            List<Comment> comments = commentMapper.selectList(wrapper);
+            if (comments.isEmpty()) {
+                PageDTO pageDTO = new PageDTO<>();
+                pageDTO.setData(new ArrayList<>());
+                return pageDTO;
+            }
+            List<Long> uidList = comments.stream().map(Comment::getUid).collect(Collectors.toList());
+            List<User> userInfoList = userService.batchQueryByIds(uidList);
+            Map<Long, Object> userMap = userInfoList.stream().collect(Collectors.toMap(User::getUid, a -> a, (a, b) -> a));
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (Comment comment : comments) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("user", userMap.get(comment.getUid()));
+                map.put("comment", comment);
+                list.add(map);
+            }
+            PageDTO<Map<String, Object>> pageDTO = new PageDTO<>();
+            pageDTO.setData(list);
+            pageDTO.setCount(comments.size());
+            pageDTO.setCursor(comments.size());
+            pageDTO.setHasMore(false);
+            return pageDTO;
         }
         List<String> commentNotFull = redisTemplate.opsForValue().multiGet(commentIdx);
         if (commentNotFull == null) {
@@ -55,15 +82,15 @@ public class CommentServiceImpl implements CommentService, BeanFactoryAware {
         // 已经在缓存的从idx中拿走
         for (int i = 0; i < commentIdx.size(); i++) {
             if (commentNotFull.get(i) != null) {
-                commentIdx.remove(String.valueOf(JSON.parseObject(commentNotFull.get(i),Comment.class).getCid()));
+                commentIdx.remove(String.valueOf(JSON.parseObject(commentNotFull.get(i), Comment.class).getCid()));
             }
         }
         // 不存在缓存的实体加入缓存
         List<Comment> comments = commentMapper.selectBatchIds(commentIdx);
         redisTemplate2.opsForValue().multiSet(comments.stream().collect(
-                Collectors.toMap(Comment::getCid,comment -> comment,
+                Collectors.toMap(Comment::getCid, comment -> comment,
                         (existing, replacement) -> existing
-                        )
+                )
         ));
         // 旧方案
         // List<Comment> comments = commentMapper.queryByEntity(entityId, cursor);
@@ -72,7 +99,7 @@ public class CommentServiceImpl implements CommentService, BeanFactoryAware {
                 && !comment.getUid().equals(BaseContext.getCurrentId())
                 && !comment.getIsDel()
         );
-        if (comments.size() == 0) {
+        if (comments.isEmpty()) {
             return null;
         }
 

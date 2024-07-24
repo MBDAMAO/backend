@@ -12,4 +12,5 @@ public class ChatMsg implements Serializable {
     private String msg;
     @TableField("send_time")
     private String time;
+    private Boolean isMyMsg;
 }

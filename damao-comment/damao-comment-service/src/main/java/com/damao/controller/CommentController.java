@@ -1,9 +1,12 @@
 package com.damao.controller;
 
 import com.damao.pojo.dto.PublishCommentDTO;
+import com.damao.pojo.entity.Comment;
 import com.damao.pojo.vo.CommentVO;
 import com.damao.result.Result;
+import com.damao.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -18,12 +21,16 @@ import java.util.List;
 @Slf4j
 public class CommentController {
 
+    @Autowired
+    private CommentService commentService;
+
     @GetMapping("/list/{vid}")
     public Result<?> getVideoComments(@PathVariable Long vid, @RequestParam Integer cursor) {
+        List<?> comments = commentService.getCommentsByEntity(vid, cursor).getData();
         CommentVO comment = CommentVO.builder()
                 .uid(123L)
                 .content("今天吃了狗屎好开心")
-                .avatar("1")
+                .avatar("https://dummyimage.com/400x400")
                 .username("damao")
                 .commentId(1134L)
                 .likes(154L)
@@ -32,7 +39,7 @@ public class CommentController {
         comment.setUpdateTime(LocalDateTime.now());
         List<CommentVO> r = new ArrayList<>();
         r.add(comment);
-        return Result.success(r);
+        return Result.success(comments);
     }
 
     // 获取某顶级评论子评论
