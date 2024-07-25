@@ -27,4 +27,6 @@ public interface VideoService {
     void saveLikeRelationUser(Long vid, Integer status);
 
     Integer getLikesStatus(Long vid);
+
+    List<Video> getMyCollections();
 }

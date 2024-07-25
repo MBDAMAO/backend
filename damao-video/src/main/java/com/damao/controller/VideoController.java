@@ -93,4 +93,10 @@ public class VideoController {
     public Result<?> getLikesStatus(@PathVariable Long vid) {
         return Result.success(videoService.getLikesStatus(vid));
     }
+
+    @GetMapping("/collections")
+    public Result<?> collections() {
+        videoService.getMyCollections();
+        return Result.success("点赞成功");
+    }
 }

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ChatMapper extends BaseMapper<ChatMsg> {
 
-    @Insert("insert into video_platform.chat_msg(from_uid, to_uid, send_time,msg) " +
-            "VALUES (#{fromUid},#{toUid},#{time},#{msg})")
-    int insert(ChatMsg chatMsg);
+//    @Insert("insert into video_platform.chat_msg(from_uid, to_uid, send_time,msg) " +
+//            "VALUES (#{fromUid},#{toUid},#{time},#{msg})")
+//    int insert(ChatMsg chatMsg);
 }

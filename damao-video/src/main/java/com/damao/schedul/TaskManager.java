@@ -10,11 +10,13 @@ import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.util.Map;
+import java.util.Set;
 
 
 @Component
@@ -34,8 +36,8 @@ public class TaskManager {
     public void cleanViewCountHistory() {
         log.info("定时任务启动，删除当日浏览记录排行记录[]~(￣▽￣)~*");
         try {
-        Object obj = redisTemplate.opsForZSet().rangeWithScores(RedisNameConstant.VIDEO_DAILY_VIEW_RANK,0,0);
-            if (obj != null) {
+            Set<ZSetOperations.TypedTuple<Object>> obj = redisTemplate.opsForZSet().rangeWithScores(RedisNameConstant.VIDEO_DAILY_VIEW_RANK,0,0);
+            if (obj != null && !obj.isEmpty()) {
                 redisTemplate.opsForZSet().remove(RedisNameConstant.VIDEO_DAILY_VIEW_RANK);
             }
         }
@@ -47,7 +49,7 @@ public class TaskManager {
     /**
      * 每五分钟执行一次，作用是迁移用户点赞缓存入库
      */
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void saveVideoLikes2DB() {
         Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(RedisNameConstant.VIDEO_LIKES_RECORD, ScanOptions.NONE);
         int cnt = 0;

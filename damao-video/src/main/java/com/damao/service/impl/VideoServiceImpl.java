@@ -179,4 +179,11 @@ public class VideoServiceImpl implements VideoService {
         redisTemplate.opsForHash().put(RedisNameConstant.VIDEO_LIKES_RECORD, "" + BaseContext.getCurrentId() + ":" + vid, status);
         return status;
     }
+
+    @Override
+    public List<Video> getMyCollections() {
+        Long uid = BaseContext.getCurrentId();
+
+        return List.of();
+    }
 }
