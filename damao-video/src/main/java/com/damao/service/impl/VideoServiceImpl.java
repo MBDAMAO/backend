@@ -1,14 +1,15 @@
 package com.damao.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.damao.constant.AuditConstant;
 import com.damao.constant.RedisNameConstant;
 import com.damao.context.BaseContext;
+import com.damao.mapper.VideoHistoryMapper;
+import com.damao.mapper.VideoSaveRelationMapper;
+import com.damao.pojo.entity.*;
 import com.damao.result.exception.BaseException;
 import com.damao.mapper.VideoMapper;
 import com.damao.mapper.VideoResourceMapper;
-import com.damao.pojo.entity.Video;
-import com.damao.pojo.entity.VideoLikesRelation;
-import com.damao.pojo.entity.VideoResource;
 import com.damao.pojo.vo.VideoRankVO;
 import com.damao.service.VideoAuditService;
 import com.damao.service.VideoService;
@@ -28,6 +29,9 @@ public class VideoServiceImpl implements VideoService {
     VideoMapper videoMapper;
 
     @Autowired
+    VideoSaveRelationMapper videoSaveRelationMapper;
+
+    @Autowired
     VideoResourceMapper videoResourceMapper;
 
     @Autowired
@@ -35,6 +39,8 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private VideoHistoryMapper videoHistoryMapper;
 
     /**
      * 发布视频，审核
@@ -83,7 +89,7 @@ public class VideoServiceImpl implements VideoService {
         List<VideoRankVO> result = new ArrayList<>();
         List<Long> vidList = new ArrayList<>();
 
-        for (Object obj : videoIds){
+        for (Object obj : videoIds) {
             vidList.add((Long) obj);
         }
         List<Video> results = videoMapper.getByIds(vidList);
@@ -180,10 +186,71 @@ public class VideoServiceImpl implements VideoService {
         return status;
     }
 
+    /**
+     * 获取我的收藏，按时间戳来进行分页查询，一次查21条，返回20条，若查到的少于21，说明后续已经无数据
+     *
+     * @return
+     */
     @Override
     public List<Video> getMyCollections() {
         Long uid = BaseContext.getCurrentId();
+        QueryWrapper<VideoSaveRelation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", uid);
+        List<VideoSaveRelation> videos = videoSaveRelationMapper.selectList(queryWrapper);
+        List<Long> vidList = videos.stream().map(VideoSaveRelation::getVid).toList();
+        List<Video> res = videoMapper.selectBatchIds(vidList);
+        for (Video video : res) {
+            if (video.getAuditStatus() == 1) {
+                // 隐藏删除等情况要逻辑隐藏掉结果
+            }
+        }
+        return res;
+    }
 
-        return List.of();
+    /**
+     * 删除我的某个收藏记录
+     *
+     * @param collectionId
+     */
+    public void deleteCollection(Long collectionId) {
+        videoSaveRelationMapper.deleteById(collectionId);
+    }
+
+    /**
+     * 将某个视频添加到我的收藏
+     *
+     * @param vid
+     */
+    public void addVideoToCollections(Long vid) {
+        VideoSaveRelation videoSaveRelation = new VideoSaveRelation();
+        videoSaveRelation.setVid(vid);
+        videoSaveRelation.setUid(BaseContext.getCurrentId());
+        videoSaveRelation.setStatus(0);
+        videoSaveRelationMapper.insert(videoSaveRelation);
+    }
+
+    public List<Video> getMyLikes() {
+        Long uid = BaseContext.getCurrentId();
+        QueryWrapper<VideoSaveRelation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", uid);
+        List<VideoSaveRelation> videos = videoSaveRelationMapper.selectList(queryWrapper);
+        List<Long> vidList = videos.stream().map(VideoSaveRelation::getVid).toList();
+        List<Video> res = videoMapper.selectBatchIds(vidList);
+        for (Video video : res) {
+            if (video.getAuditStatus() == 1) {
+                // 隐藏删除等情况要逻辑隐藏掉结果
+            }
+        }
+        return res;
+    }
+
+    public List<Video> getWatchHistory() {
+        Long uid = BaseContext.getCurrentId();
+        QueryWrapper<VideoHistory> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", uid);
+        List<VideoHistory> videoHistories = videoHistoryMapper.selectList(queryWrapper);
+        List<Long> vidList = videoHistories.stream().map(VideoHistory::getVid).toList();
+        List<Video> res = videoMapper.selectBatchIds(vidList);
+        return res;
     }
 }
